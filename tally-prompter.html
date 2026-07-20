@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Tally Prompter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0c;
+    --panel:rgba(18,18,22,0.88);
+    --panel-solid:#141418;
+    --line:rgba(255,255,255,0.08);
+    --tally:#ff3b4e;
+    --tally-dim:rgba(255,59,78,0.35);
+    --text-hi:#f5f5f2;
+    --text-mid:#9a9aa2;
+    --mono:'JetBrains Mono',monospace;
+    --sans:'Inter',sans-serif;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{
+    margin:0; padding:0; height:100%; width:100%;
+    background:var(--bg); overflow:hidden;
+    font-family:var(--sans); color:var(--text-hi);
+    overscroll-behavior:none;
+  }
+  #stage{
+    position:fixed; inset:0; height:100dvh; width:100vw;
+    background:#000;
+  }
+  #camera{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; background:#000;
+  }
+  #camera.mirror{ transform:scaleX(-1); }
+
+  /* ---- Start overlay ---- */
+  #startScreen{
+    position:absolute; inset:0; z-index:50;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:22px; padding:32px; text-align:center;
+    background:radial-gradient(circle at 50% 30%, #17171c 0%, #0a0a0c 70%);
+  }
+  .tallylogo{
+    width:14px; height:14px; border-radius:50%;
+    background:var(--tally); box-shadow:0 0 18px 4px var(--tally-dim);
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  #startScreen h1{
+    font-size:22px; letter-spacing:0.02em; margin:0; font-weight:700;
+  }
+  #startScreen p{
+    color:var(--text-mid); font-size:14px; max-width:280px; line-height:1.5; margin:0;
+  }
+  .bigbtn{
+    font-family:var(--mono); font-weight:700; font-size:14px; letter-spacing:0.04em;
+    background:var(--tally); color:#0a0a0c; border:none; border-radius:100px;
+    padding:16px 34px; text-transform:uppercase; cursor:pointer;
+  }
+  .bigbtn:active{ transform:scale(0.97); }
+  #camErr{ color:var(--tally); font-size:13px; font-family:var(--mono); display:none; max-width:280px;}
+
+  /* ---- Lens alignment guide ---- */
+  #lensGuide{
+    position:absolute; width:64px; height:64px; margin:-32px 0 0 -32px;
+    border-radius:50%; border:2px solid var(--tally);
+    box-shadow:0 0 0 4000px rgba(0,0,0,0.001);
+    display:flex; align-items:center; justify-content:center;
+    z-index:20; touch-action:none; cursor:grab;
+  }
+  #lensGuide::before,#lensGuide::after{
+    content:''; position:absolute; background:var(--tally); opacity:0.85;
+  }
+  #lensGuide::before{ width:2px; height:14px; top:-9px; }
+  #lensGuide::after{ width:14px; height:2px; left:-9px; }
+  #lensGuide .dot{ width:6px; height:6px; border-radius:50%; background:var(--tally); }
+  #lensGuide .tag{
+    position:absolute; top:70px; left:50%; transform:translateX(-50%);
+    font-family:var(--mono); font-size:9px; letter-spacing:0.08em; color:var(--tally);
+    white-space:nowrap; text-transform:uppercase; opacity:0.85;
+  }
+
+  /* ---- Prompter panel ---- */
+  #prompterPanel{
+    position:absolute; left:50%; transform:translateX(-50%);
+    width:92vw; max-width:560px; height:34vh; min-height:120px; max-height:70vh;
+    background:var(--panel); border-radius:18px; border:1px solid var(--line);
+    z-index:15; touch-action:none; overflow:hidden;
+    backdrop-filter:blur(6px);
+  }
+  #dragHandle{
+    height:22px; display:flex; align-items:center; justify-content:center; cursor:grab;
+  }
+  #dragHandle .bar{ width:36px; height:4px; border-radius:2px; background:var(--text-mid); opacity:0.5; }
+  #scriptScroll{
+    height:calc(100% - 22px); overflow:hidden; padding:0 22px 24px;
+  }
+  #scriptText{
+    font-size:26px; line-height:1.55; font-weight:600; color:var(--text-hi);
+    white-space:pre-wrap; word-break:break-word;
+    padding-top:6px;
+  }
+  #resizeHandle{
+    position:absolute; bottom:0; right:0; width:34px; height:34px;
+    display:flex; align-items:flex-end; justify-content:flex-end; padding:6px;
+    cursor:ns-resize; touch-action:none; color:var(--text-mid); opacity:0.6;
+  }
+
+  /* ---- Bottom controls ---- */
+  #gearBtn{
+    position:absolute; z-index:30; right:16px; bottom:16px;
+    width:48px; height:48px; border-radius:50%; border:1px solid var(--line);
+    background:var(--panel); color:var(--text-hi); font-size:20px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  #recBtn{
+    position:absolute; z-index:30; left:16px; bottom:16px;
+    width:60px; height:60px; border-radius:50%; border:3px solid var(--text-hi);
+    background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    padding:0;
+  }
+  #recBtn .core{
+    width:44px; height:44px; border-radius:50%; background:var(--tally); transition:all .18s;
+  }
+  #recBtn.recording .core{ border-radius:8px; width:26px; height:26px; }
+  #recTimer{
+    position:absolute; left:84px; bottom:34px; z-index:30;
+    font-family:var(--mono); font-size:13px; color:var(--tally); display:none;
+    letter-spacing:0.05em;
+  }
+  #recTimer.show{ display:block; }
+
+  #drawer{
+    position:absolute; z-index:40; left:0; right:0; bottom:0;
+    background:var(--panel-solid); border-top:1px solid var(--line);
+    border-radius:20px 20px 0 0; padding:14px 18px calc(18px + env(safe-area-inset-bottom));
+    transform:translateY(100%); transition:transform .28s ease;
+    max-height:78vh; overflow-y:auto;
+  }
+  #drawer.open{ transform:translateY(0); }
+  #drawerHandle{ display:flex; justify-content:center; padding-bottom:10px; }
+  #drawerHandle .bar{ width:36px; height:4px; border-radius:2px; background:var(--text-mid); opacity:0.5; }
+  .drawerTitle{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.12em; color:var(--text-mid);
+    text-transform:uppercase; margin:14px 0 8px;
+  }
+  .drawerTitle:first-child{ margin-top:0; }
+  textarea#scriptInput{
+    width:100%; min-height:110px; background:#1b1b20; border:1px solid var(--line);
+    border-radius:12px; color:var(--text-hi); font-family:var(--sans); font-size:15px;
+    padding:12px; resize:vertical; line-height:1.5;
+  }
+  .row{ display:flex; align-items:center; gap:12px; margin:10px 0; }
+  .row label{ font-size:13px; color:var(--text-mid); width:76px; flex-shrink:0; }
+  .row input[type=range]{ flex:1; accent-color:var(--tally); }
+  .row .val{ font-family:var(--mono); font-size:12px; color:var(--text-hi); width:38px; text-align:right; }
+  .toggleRow{ display:flex; justify-content:space-between; align-items:center; margin:10px 0; }
+  .toggleRow span{ font-size:14px; }
+  .switch{ position:relative; width:44px; height:26px; }
+  .switch input{ opacity:0; width:0; height:0; }
+  .slider2{
+    position:absolute; inset:0; background:#2a2a30; border-radius:100px; cursor:pointer; transition:.2s;
+  }
+  .slider2::before{
+    content:''; position:absolute; width:20px; height:20px; left:3px; top:3px;
+    background:#fff; border-radius:50%; transition:.2s;
+  }
+  .switch input:checked + .slider2{ background:var(--tally); }
+  .switch input:checked + .slider2::before{ transform:translateX(18px); }
+
+  .btnRow{ display:flex; gap:10px; margin-top:16px; }
+  .pillBtn{
+    flex:1; font-family:var(--mono); font-size:12px; letter-spacing:0.04em; text-transform:uppercase;
+    padding:12px; border-radius:100px; border:1px solid var(--line); background:#1b1b20; color:var(--text-hi);
+    cursor:pointer; text-align:center;
+  }
+  .pillBtn.primary{ background:var(--tally); color:#0a0a0c; border:none; font-weight:700; }
+
+  #downloadBar{
+    display:none; align-items:center; justify-content:space-between; gap:10px;
+    background:#1b1b20; border:1px solid var(--line); border-radius:12px; padding:10px 14px; margin-top:14px;
+  }
+  #downloadBar.show{ display:flex; }
+  #downloadBar span{ font-size:13px; color:var(--text-mid); }
+  #downloadBar a{ font-family:var(--mono); font-size:12px; color:var(--tally); text-decoration:none; font-weight:700; }
+
+  #closeDrawer{
+    position:absolute; top:10px; right:14px; background:none; border:none; color:var(--text-mid);
+    font-size:20px; cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <video id="camera" autoplay playsinline muted></video>
+
+  <div id="lensGuide" style="top:18%; left:50%;">
+    <div class="dot"></div>
+    <div class="tag">Lens</div>
+  </div>
+
+  <div id="prompterPanel" style="top:26%;">
+    <div id="dragHandle"><div class="bar"></div></div>
+    <div id="scriptScroll">
+      <div id="scriptText">Apna script yahan control panel se paste karein — phir play dabayein.</div>
+    </div>
+    <div id="resizeHandle">⋰</div>
+  </div>
+
+  <button id="recBtn" title="Record"><div class="core"></div></button>
+  <div id="recTimer">00:00</div>
+  <button id="gearBtn" title="Controls">⚙</button>
+
+  <div id="drawer">
+    <button id="closeDrawer">✕</button>
+    <div id="drawerHandle"><div class="bar"></div></div>
+
+    <div class="drawerTitle">Script</div>
+    <textarea id="scriptInput" placeholder="Apna script yahan type ya paste karein...">Apna script yahan control panel se paste karein — phir play dabayein.</textarea>
+
+    <div class="drawerTitle">Playback</div>
+    <div class="row">
+      <label>Speed</label>
+      <input type="range" id="speedSlider" min="0" max="100" value="28">
+      <span class="val" id="speedVal">28</span>
+    </div>
+    <div class="row">
+      <label>Font size</label>
+      <input type="range" id="fontSlider" min="16" max="60" value="26">
+      <span class="val" id="fontVal">26</span>
+    </div>
+    <div class="row">
+      <label>Opacity</label>
+      <input type="range" id="opSlider" min="20" max="100" value="88">
+      <span class="val" id="opVal">88</span>
+    </div>
+
+    <div class="drawerTitle">Camera</div>
+    <div class="toggleRow">
+      <span>Mirror preview</span>
+      <label class="switch"><input type="checkbox" id="mirrorToggle"><span class="slider2"></span></label>
+    </div>
+    <div class="btnRow">
+      <div class="pillBtn" id="flipCamBtn">Switch camera</div>
+    </div>
+
+    <div id="downloadBar">
+      <span>Recording ready</span>
+      <a id="downloadLink" download="tally-prompter-recording.webm">Download ⤓</a>
+    </div>
+
+    <div class="btnRow">
+      <div class="pillBtn primary" id="playPauseBtn">▶ Play scroll</div>
+      <div class="pillBtn" id="resetBtn">⤒ Reset</div>
+    </div>
+  </div>
+
+  <div id="startScreen">
+    <div class="tallylogo"></div>
+    <h1>Tally Prompter</h1>
+    <p>Camera on karke apna script padhte hue record karein. Lens ke paas ek chhota nishaan hoga — usse apne camera lens ke upar drag kar dena, taaki aankhein lens ke kareeb rahen.</p>
+    <button class="bigbtn" id="startBtn">Camera Shuru Karein</button>
+    <p id="camErr">Camera access nahi mil paaya. Browser settings mein camera permission allow karein aur page reload karein.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  const video = document.getElementById('camera');
+  const startScreen = document.getElementById('startScreen');
+  const startBtn = document.getElementById('startBtn');
+  const camErr = document.getElementById('camErr');
+  const lensGuide = document.getElementById('lensGuide');
+  const panel = document.getElementById('prompterPanel');
+  const dragHandle = document.getElementById('dragHandle');
+  const resizeHandle = document.getElementById('resizeHandle');
+  const scriptScroll = document.getElementById('scriptScroll');
+  const scriptText = document.getElementById('scriptText');
+  const scriptInput = document.getElementById('scriptInput');
+  const gearBtn = document.getElementById('gearBtn');
+  const closeDrawer = document.getElementById('closeDrawer');
+  const drawer = document.getElementById('drawer');
+  const speedSlider = document.getElementById('speedSlider');
+  const speedVal = document.getElementById('speedVal');
+  const fontSlider = document.getElementById('fontSlider');
+  const fontVal = document.getElementById('fontVal');
+  const opSlider = document.getElementById('opSlider');
+  const opVal = document.getElementById('opVal');
+  const mirrorToggle = document.getElementById('mirrorToggle');
+  const flipCamBtn = document.getElementById('flipCamBtn');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const recBtn = document.getElementById('recBtn');
+  const recTimer = document.getElementById('recTimer');
+  const downloadBar = document.getElementById('downloadBar');
+  const downloadLink = document.getElementById('downloadLink');
+
+  let stream = null;
+  let facingMode = 'user';
+  let scrolling = false;
+  let rafId = null;
+
+  // ---- Camera ----
+  async function startCamera(){
+    try{
+      if(stream){ stream.getTracks().forEach(t=>t.stop()); }
+      stream = await navigator.mediaDevices.getUserMedia({
+        video:{ facingMode, width:{ideal:1080}, height:{ideal:1920} },
+        audio:true
+      });
+      video.srcObject = stream;
+      startScreen.style.display = 'none';
+      camErr.style.display = 'none';
+    }catch(e){
+      camErr.style.display = 'block';
+    }
+  }
+  startBtn.addEventListener('click', startCamera);
+  flipCamBtn.addEventListener('click', ()=>{
+    facingMode = facingMode === 'user' ? 'environment' : 'user';
+    startCamera();
+  });
+  mirrorToggle.addEventListener('change', ()=>{
+    video.classList.toggle('mirror', mirrorToggle.checked);
+  });
+
+  // ---- Generic drag helper (pointer events) ----
+  function makeDraggable(handleEl, targetEl, opts){
+    opts = opts || {};
+    let startX, startY, startLeft, startTop, dragging=false;
+    handleEl.addEventListener('pointerdown', (e)=>{
+      dragging = true;
+      handleEl.setPointerCapture(e.pointerId);
+      const rect = targetEl.getBoundingClientRect();
+      startX = e.clientX; startY = e.clientY;
+      startLeft = rect.left + rect.width/2;
+      startTop = rect.top + (opts.useTop ? 0 : rect.height/2);
+      e.preventDefault();
+    });
+    handleEl.addEventListener('pointermove', (e)=>{
+      if(!dragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if(opts.useTop){
+        let newTop = startTop + dy;
+        newTop = Math.max(4, Math.min(window.innerHeight - 60, newTop));
+        targetEl.style.top = newTop + 'px';
+      } else {
+        let newLeft = startLeft + dx;
+        let newTop = startTop + dy;
+        newLeft = Math.max(20, Math.min(window.innerWidth-20, newLeft));
+        newTop = Math.max(20, Math.min(window.innerHeight-20, newTop));
+        targetEl.style.left = newLeft + 'px';
+        targetEl.style.top = newTop + 'px';
+      }
+    });
+    function endDrag(e){ dragging=false; }
+    handleEl.addEventListener('pointerup', endDrag);
+    handleEl.addEventListener('pointercancel', endDrag);
+  }
+  makeDraggable(lensGuide, lensGuide, {useTop:false});
+  makeDraggable(dragHandle, panel, {useTop:true});
+
+  // vertical resize of panel
+  (function(){
+    let startY, startH, resizing=false;
+    resizeHandle.addEventListener('pointerdown', (e)=>{
+      resizing = true;
+      resizeHandle.setPointerCapture(e.pointerId);
+      startY = e.clientY;
+      startH = panel.getBoundingClientRect().height;
+      e.preventDefault();
+    });
+    resizeHandle.addEventListener('pointermove', (e)=>{
+      if(!resizing) return;
+      let newH = startH + (e.clientY - startY);
+      newH = Math.max(120, Math.min(window.innerHeight*0.7, newH));
+      panel.style.height = newH + 'px';
+    });
+    function end(){ resizing = false; }
+    resizeHandle.addEventListener('pointerup', end);
+    resizeHandle.addEventListener('pointercancel', end);
+  })();
+
+  // ---- Drawer ----
+  gearBtn.addEventListener('click', ()=> drawer.classList.add('open'));
+  closeDrawer.addEventListener('click', ()=> drawer.classList.remove('open'));
+
+  // ---- Script text sync ----
+  scriptInput.addEventListener('input', ()=>{
+    scriptText.textContent = scriptInput.value || '';
+  });
+
+  // ---- Font size ----
+  function setFont(v){
+    scriptText.style.fontSize = v + 'px';
+    fontVal.textContent = v;
+  }
+  fontSlider.addEventListener('input', ()=> setFont(fontSlider.value));
+  setFont(fontSlider.value);
+
+  // ---- Opacity ----
+  function setOpacity(v){
+    panel.style.background = 'rgba(18,18,22,' + (v/100*0.92) + ')';
+    opVal.textContent = v;
+  }
+  opSlider.addEventListener('input', ()=> setOpacity(opSlider.value));
+  setOpacity(opSlider.value);
+
+  // ---- Speed label ----
+  speedSlider.addEventListener('input', ()=> speedVal.textContent = speedSlider.value);
+
+  // ---- Auto scroll ----
+  function scrollStep(){
+    if(!scrolling) return;
+    const speed = parseInt(speedSlider.value,10);
+    const pxPerFrame = speed / 40; // 0-100 -> 0-2.5 px/frame ~ gentle to fast
+    scriptScroll.scrollTop += pxPerFrame;
+    // stop at bottom
+    if(scriptScroll.scrollTop + scriptScroll.clientHeight >= scriptScroll.scrollHeight - 2){
+      scrolling = false;
+      playPauseBtn.textContent = '▶ Play scroll';
+      return;
+    }
+    rafId = requestAnimationFrame(scrollStep);
+  }
+  function togglePlay(){
+    scrolling = !scrolling;
+    playPauseBtn.textContent = scrolling ? '⏸ Pause scroll' : '▶ Play scroll';
+    if(scrolling) rafId = requestAnimationFrame(scrollStep);
+    else cancelAnimationFrame(rafId);
+  }
+  playPauseBtn.addEventListener('click', togglePlay);
+  resetBtn.addEventListener('click', ()=>{
+    scriptScroll.scrollTop = 0;
+    scrolling = false;
+    playPauseBtn.textContent = '▶ Play scroll';
+    cancelAnimationFrame(rafId);
+  });
+
+  // allow manual touch scroll on the script area itself (pause autoplay while touching)
+  scriptScroll.addEventListener('touchstart', ()=>{
+    if(scrolling){ scrolling=false; cancelAnimationFrame(rafId); playPauseBtn.textContent='▶ Play scroll'; }
+  }, {passive:true});
+
+  // ---- Recording ----
+  let mediaRecorder, chunks=[], recStartTime, timerInt;
+  recBtn.addEventListener('click', ()=>{
+    if(!stream){ return; }
+    if(!mediaRecorder || mediaRecorder.state === 'inactive'){
+      chunks = [];
+      let mime = 'video/webm;codecs=vp9,opus';
+      if(!MediaRecorder.isTypeSupported(mime)) mime = 'video/webm';
+      mediaRecorder = new MediaRecorder(stream, {mimeType:mime});
+      mediaRecorder.ondataavailable = (e)=>{ if(e.data.size>0) chunks.push(e.data); };
+      mediaRecorder.onstop = ()=>{
+        const blob = new Blob(chunks, {type:'video/webm'});
+        const url = URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadBar.classList.add('show');
+        drawer.classList.add('open');
+      };
+      mediaRecorder.start();
+      recStartTime = Date.now();
+      recTimer.classList.add('show');
+      timerInt = setInterval(()=>{
+        const s = Math.floor((Date.now()-recStartTime)/1000);
+        const mm = String(Math.floor(s/60)).padStart(2,'0');
+        const ss = String(s%60).padStart(2,'0');
+        recTimer.textContent = mm+':'+ss;
+      }, 500);
+      recBtn.classList.add('recording');
+    } else {
+      mediaRecorder.stop();
+      clearInterval(timerInt);
+      recBtn.classList.remove('recording');
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
