@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service By Local — Zero-Commission Hyperlocal Services Marketplace</title>
+<meta name="description" content="Service By Local is a zero-commission marketplace that connects verified local service providers — appliance repair, home services, construction, event services, tutors and more — directly with nearby customers. No middlemen, no commission, Aadhaar-verified.">
+<link rel="canonical" href="https://servicebylocal.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Service By Local">
+<meta property="og:title" content="Service By Local — Zero-Commission Hyperlocal Services Marketplace">
+<meta property="og:description" content="Service By Local is a zero-commission marketplace that connects verified local service providers — appliance repair, home services, construction, event services, tutors and more — directly with nearby customers. No middlemen, no commission, Aadhaar-verified.">
+<meta property="og:url" content="https://servicebylocal.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Service By Local — Zero-Commission Hyperlocal Services Marketplace">
+<meta name="twitter:description" content="Service By Local is a zero-commission marketplace that connects verified local service providers — appliance repair, home services, construction, event services, tutors and more — directly with nearby customers. No middlemen, no commission, Aadhaar-verified.">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Service By Local",
+  "url": "https://servicebylocal.com/",
+  "description": "Service By Local is a zero-commission hyperlocal services marketplace that connects Aadhaar-verified local service providers directly with nearby customers, without middlemen or job-dispatch.",
+  "brand": "SBL Digital Corporation Private Limited",
+  "sameAs": []
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What is Service By Local?","acceptedAnswer":{"@type":"Answer","text":"Service By Local is a zero-commission hyperlocal services marketplace. It connects independent local providers — such as appliance repair technicians, electricians, plumbers, home-visit salon artists, local material suppliers, and vehicle owner-drivers — directly with nearby customers, without any middleman or commission. It is not a staffing or recruitment platform."}},
+    {"@type":"Question","name":"Does Service By Local charge commission on jobs?","acceptedAnswer":{"@type":"Answer","text":"No. Service By Local does not take any commission from providers or customers. Providers keep 100% of what they earn."}},
+    {"@type":"Question","name":"Is Service By Local a job marketplace or staffing agency?","acceptedAnswer":{"@type":"Answer","text":"No. Service By Local is not a job marketplace and does not dispatch staff. Every provider profile must be personally operated by the same individual who performs the service — a provider cannot send an employee or another person on their behalf."}},
+    {"@type":"Question","name":"How are providers verified on Service By Local?","acceptedAnswer":{"@type":"Answer","text":"Providers complete Aadhaar-based identity verification to show interest on requests and unlock an 'Aadhaar OK' badge on their profile. Only their name, age, and gender are verified and shown — the Aadhaar number and photo are never displayed. Providers can also upload a skill certificate, which is reviewed and approved by the SBL team before a 'Skill Certified' badge appears on their profile."}},
+    {"@type":"Question","name":"How does a customer request a service on Service By Local?","acceptedAnswer":{"@type":"Answer","text":"A customer can either open a provider's full profile and send a request directly to that one provider, or post a request to the local feed so nearby verified providers can see it and show interest. In both cases, the provider is notified instantly, and the customer's exact contact details are shared only once they confirm a provider."}},
+    {"@type":"Question","name":"Can a customer call or message a provider directly?","acceptedAnswer":{"@type":"Answer","text":"Yes. From a provider's profile, a customer can call, message on WhatsApp, or use in-app chat directly — in addition to sending a job request."}},
+    {"@type":"Question","name":"What service categories does Service By Local cover?","acceptedAnswer":{"@type":"Answer","text":"Service By Local covers eight categories: Appliance Repair, Home Services (electrician, plumber, cleaning), Construction (mason, painter, labour, welding), Rental Vehicle, Daily Needs, Beauty & Grooming, Event Services, and Education & Tuition, split further into 66 sub-categories."}},
+    {"@type":"Question","name":"Is Service By Local available as a mobile app?","acceptedAnswer":{"@type":"Answer","text":"Yes, Service By Local is available as an app on Google Play, in addition to the website."}}
+  ]
+}
+</script>
+</head>
+<body>
+<nav class="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">
+      <img src="logo.png" alt="Service By Local" class="brand-logo" onerror="this.remove()">
+      <span class="dot"></span>Service By<span class="local">Local</span>
+    </a>
+    <div class="navlinks">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+    </div>
+    <div class="navcta">
+      <a href="#" class="btn btn-ghost" onclick="openApp(event,'request')">Post a Request</a>
+      <a href="#" class="btn btn-primary" onclick="openApp(event,'provider')">Create Profile</a>
+      <button class="nav-burger" aria-label="Open menu" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <div class="wrap">
+    <a href="index.html" onclick="toggleMenu()">Home</a>
+    <a href="services.html" onclick="toggleMenu()">All Services</a>
+    <a href="about.html" onclick="toggleMenu()">About Us</a>
+    <a href="terms.html" onclick="toggleMenu()">Terms &amp; Conditions</a>
+    <a href="privacy.html" onclick="toggleMenu()">Privacy Policy</a>
+    <a href="mailto:support@servicebylocal.com" onclick="toggleMenu()">Contact Support</a>
+    <div class="mm-cta">
+      <a href="#" class="btn btn-primary" style="width:100%;justify-content:center;" onclick="toggleMenu();openApp(event,'provider')">Create Profile</a>
+    </div>
+  </div>
+</div>
+
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Hyperlocal Services Marketplace</p>
+      <h1>Find a verified local service provider, or get discovered by one. <span class="accent">Zero commission, no middlemen.</span></h1>
+      <p class="lede">Service By Local connects skilled service providers directly with customers nearby — repair, home services, construction, events, tutoring and more. No agents, no commission cuts, no dispatch. Just verified people, ready to help.</p>
+      <div class="ctas">
+        <a href="#" class="btn btn-primary" onclick="openApp(event,'search')"><i class="fa-solid fa-magnifying-glass"></i> Find a Service</a>
+        <a href="#" class="btn btn-ghost" onclick="openApp(event,'provider')"><i class="fa-solid fa-user-plus"></i> Become a Provider</a>
+      </div>
+      <a href="#" class="store-badge" onclick="openApp(event,'home')">
+        <i class="fa-brands fa-google-play"></i>
+        <span><small>Get it on</small><b>Google Play</b></span>
+      </a>
+      <div class="trustline"><i class="fa-solid fa-shield-halved"></i> Aadhaar &amp; skill verification badges &nbsp;·&nbsp; <i class="fa-solid fa-hand-holding-dollar"></i> Zero commission, always</div>
+    </div>
+
+    <div class="map-card">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="ph-top">
+            <span class="ph-logo"><i class="fa-solid fa-leaf"></i>Service<b>By Local</b></span>
+            <i class="fa-solid fa-bell ph-bell"></i>
+          </div>
+          <div class="ph-search"><i class="fa-solid fa-magnifying-glass"></i>Search for Electrician</div>
+          <div class="ph-label">Experts Near You</div>
+          <div class="fc-scope">
+          <div class="grid">
+            <div class="fc">
+              <div class="fc-photo">
+                <div class="fc-hero" style="background:linear-gradient(145deg,#0A5238,#00A86B)">
+                  <i class="fas fa-bolt fc-wm"></i>
+                  <div class="fc-fade"></div>
+                </div>
+                <div class="fc-badge"><div class="fc-badge-ic"><i class="fas fa-check-double"></i></div><span>Aadhaar + Skill</span></div>
+                <div class="fc-av" style="background:linear-gradient(150deg,#0A5238,#00A86B)">R<span class="d"></span></div>
+              </div>
+              <div class="fc-b">
+                <div class="fc-t">Expert Electrician</div>
+                <div class="fc-by"><i class="fas fa-user"></i><span>Ramesh Kumar</span></div>
+                <div class="fc-cat"><i class="fas fa-tag"></i>Electrician</div>
+                <div class="fc-row">
+                  <div class="fc-chip rate"><i class="fas fa-star"></i>4.9<small>(42)</small></div>
+                  <div class="fc-chip exp"><i class="fas fa-briefcase"></i>8+ Yrs</div>
+                </div>
+                <div class="fc-dist"><i class="fas fa-route"></i>6 min away</div>
+              </div>
+            </div>
+            <div class="fc">
+              <div class="fc-photo">
+                <div class="fc-hero" style="background:linear-gradient(145deg,#78350F,#D97706)">
+                  <i class="fas fa-hammer fc-wm"></i>
+                  <div class="fc-fade"></div>
+                </div>
+                <div class="fc-badge blue"><div class="fc-badge-ic"><i class="fas fa-award"></i></div><span>Skill Certified</span></div>
+                <div class="fc-av" style="background:linear-gradient(150deg,#78350F,#D97706)">V<span class="d"></span></div>
+              </div>
+              <div class="fc-b">
+                <div class="fc-t">Carpenter — Furniture &amp; Repair</div>
+                <div class="fc-by"><i class="fas fa-user"></i><span>Vikash Sharma</span></div>
+                <div class="fc-cat"><i class="fas fa-tag"></i>Carpenter</div>
+                <div class="fc-row">
+                  <div class="fc-chip rate new"><i class="fas fa-seedling"></i>New</div>
+                  <div class="fc-chip exp"><i class="fas fa-briefcase"></i>14+ Yrs</div>
+                </div>
+                <div class="fc-dist"><i class="fas fa-route"></i>14 min away</div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="map-caption">
+        <span class="place"><i class="fa-solid fa-location-dot" style="color:var(--green-dark)"></i> Near you</span>
+        <span class="badge">Live requests nearby</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="insight">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow" style="color:#8FD9B6">The problem</p>
+      <h2>Finding a good local provider still means asking around — and losing a cut to whoever refers you.</h2>
+      <p>Most people still find an electrician, a mason, or an event vendor by asking a neighbour, who knows an agent, who takes a cut before the work even starts. Service By Local puts verified providers directly on a map — discoverable by anyone nearby, with nothing taken off their earnings.</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="num">0%</div><div class="lbl">Commission charged to providers, ever</div></div>
+      <div class="stat-card"><div class="num">8</div><div class="lbl">Service categories, 66 sub-categories</div></div>
+      <div class="stat-card"><div class="num">2</div><div class="lbl">Verification badges — Aadhaar OK &amp; Skill Certified</div></div>
+      <div class="stat-card"><div class="num">1</div><div class="lbl">Rule: the profile owner does the work</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Why this matters</p>
+      <h2>A doctor has a Google listing. A hotel has one too. The electrician down the street never did.</h2>
+      <p>People go online, check ratings and reviews, and decide who to trust — for a doctor, a hotel, almost any business. But someone who earns with their own two hands — an electrician, a mason, a driver — has never had that same digital identity. Service By Local gives them exactly that: a real profile, found directly by nearby customers, built on their own name.</p>
+    </div>
+    <div class="values">
+      <div class="vcard"><i class="fa-solid fa-id-badge"></i><h4>Their own name, their own recognition</h4><p>Not an anonymous worker on someone else's app — a profile with a name, a rating, and reviews that belong to them.</p></div>
+      <div class="vcard"><i class="fa-solid fa-hand-fist"></i><h4>No need to work under anyone</h4><p>A provider runs their own operation directly — no agent, no employer, no one else deciding who they work for.</p></div>
+      <div class="vcard"><i class="fa-solid fa-magnifying-glass-location"></i><h4>Found directly, chosen directly</h4><p>Customers browse full profiles — just like checking a doctor or hotel online — and connect straight with the person who'll do the work.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how-it-works">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">How it works</p>
+      <h2>Two ways in, one honest marketplace</h2>
+      <p>Whether you need help or you provide it, Service By Local is built around one simple idea: real people, doing real work, found by the neighbours who need them.</p>
+    </div>
+    <div class="paths">
+      <div class="path-card">
+        <div class="tag">For customers</div>
+        <h3>Reach a provider directly, or post a request</h3>
+        <ul class="steps">
+          <li><span class="num">1</span>Browse provider cards nearby, or open a full profile and swipe to see the next expert.</li>
+          <li><span class="num">2</span>Call, WhatsApp, or in-app chat a provider directly — or send them a job request straight from their profile.</li>
+          <li><span class="num">3</span>Prefer to let providers come to you? Post a request to the local feed instead — nearby verified providers get notified and can show interest.</li>
+          <li><span class="num">4</span>Compare interested providers and choose — your exact contact details are shared only once you confirm someone.</li>
+        </ul>
+      </div>
+      <div class="path-card">
+        <div class="tag">For providers</div>
+        <h3>Build a profile, get discovered</h3>
+        <ul class="steps">
+          <li><span class="num">1</span>Create your profile with your category, services, and rates.</li>
+          <li><span class="num">2</span>Get Aadhaar-verified to show interest on feed requests and unlock the "Aadhaar OK" badge — add skill certificates for an extra "Skill Certified" badge.</li>
+          <li><span class="num">3</span>Get notified the instant a nearby customer posts a matching request, or sends you a direct request from your profile.</li>
+          <li><span class="num">4</span>Reply through call, WhatsApp, or in-app chat, and keep 100% of what you earn.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">The moment a request is posted</p>
+      <h2>Notified as fast as a driver on Ola or Uber</h2>
+      <p>The instant a customer posts a request — or sends one directly to a provider's profile — every matching, Aadhaar-verified provider nearby gets pinged immediately. No refreshing, no waiting.</p>
+    </div>
+    <div class="values">
+      <div class="vcard"><i class="fa-solid fa-bell"></i><h4>In-app + push, both at once</h4><p>The request lands in the provider's in-app notification list <em>and</em> as a phone push notification — the same instant, whether the app is open or not.</p></div>
+      <div class="vcard"><i class="fa-solid fa-sliders"></i><h4>"Live Request Alerts" toggle</h4><p>Providers control this per service on their profile — choosing exactly which categories should ping them the moment a new request matches.</p></div>
+      <div class="vcard"><i class="fa-solid fa-arrow-up-right-dots"></i><h4>First to respond, best placed</h4><p>Providers who show interest quickly get lifted toward the top of the customer's list — just like nearby drivers get first shot at a ride.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="categories" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">What's on the platform</p>
+      <h2>Built for the work your town actually needs</h2>
+      <p>From daily household help to skilled trades — organised into categories that make sense on the ground, not in a boardroom.</p>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card"><i class="fa-solid fa-kitchen-set"></i><h4>Appliance Repair</h4><p>AC, fridge, washing machine, TV</p></div>
+      <div class="cat-card"><i class="fa-solid fa-house-chimney-window"></i><h4>Home Services</h4><p>Electrician, plumber, cleaning</p></div>
+      <div class="cat-card"><i class="fa-solid fa-helmet-safety"></i><h4>Construction</h4><p>Mason, painter, labour, welding</p></div>
+      <div class="cat-card"><i class="fa-solid fa-truck-pickup"></i><h4>Rental Vehicle</h4><p>Tempo, truck, driver on hire</p></div>
+      <div class="cat-card"><i class="fa-solid fa-basket-shopping"></i><h4>Daily Needs</h4><p>Everyday local essentials</p></div>
+      <div class="cat-card"><i class="fa-solid fa-spa"></i><h4>Beauty & Grooming</h4><p>Salon, parlour, mehendi, spa</p></div>
+      <div class="cat-card"><i class="fa-solid fa-champagne-glasses"></i><h4>Event Services</h4><p>DJ, tent, decoration, catering</p></div>
+      <div class="cat-card"><i class="fa-solid fa-graduation-cap"></i><h4>Education & Tuition</h4><p>Home tuition, skill classes</p></div>
+    </div>
+    <a href="services.html" class="cat-more"><i class="fa-solid fa-list-ul"></i> View the full service list &amp; rates</a>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">On a provider's profile</p>
+      <h2>Reach a provider directly — call, message, or send a request</h2>
+      <p>Tap any card to open a provider's full profile. From there, swipe sideways to browse the next expert, or take action right away.</p>
+    </div>
+    <div class="values">
+      <div class="vcard"><i class="fa-solid fa-phone"></i><h4>Call directly</h4><p>Ring the provider straight from their profile — no call centre in between.</p></div>
+      <div class="vcard"><i class="fa-brands fa-whatsapp"></i><h4>WhatsApp</h4><p>Message on WhatsApp with one tap, using the number on their profile.</p></div>
+      <div class="vcard"><i class="fa-solid fa-comment-dots"></i><h4>In-app chat</h4><p>Prefer to stay in the app? Chat with the provider without leaving Service By Local.</p></div>
+      <div class="vcard"><i class="fa-solid fa-paper-plane"></i><h4>Send a direct request</h4><p>Pick a service, choose when you need it (urgent, today, tomorrow, or later), describe the work, and send it straight to that one provider.</p></div>
+      <div class="vcard"><i class="fa-solid fa-shield-halved"></i><h4>"Aadhaar OK" badge</h4><p>Identity confirmed by SBL. Only the provider's name, age, and gender are verified and shown — the Aadhaar number and photo are never displayed.</p></div>
+      <div class="vcard"><i class="fa-solid fa-award"></i><h4>"Skill Certified" badge</h4><p>Shown once a provider's skill certificate has been reviewed and approved by the SBL team.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section compare" id="trust">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Why it's different</p>
+      <h2>No commission. No dispatch. No middleman deciding who works.</h2>
+      <p>Most platforms take a cut and assign whoever's available. Service By Local isn't a job marketplace — every provider has their own digital profile, chooses their own work, and keeps everything they earn.</p>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-card old">
+        <h4>Typical service apps</h4>
+        <ul>
+          <li><i class="fa-solid fa-circle-xmark"></i> 15–30% commission taken from every job</li>
+          <li><i class="fa-solid fa-circle-xmark"></i> Company assigns whichever worker is free</li>
+          <li><i class="fa-solid fa-circle-xmark"></i> Workers can send anyone on their behalf</li>
+          <li><i class="fa-solid fa-circle-xmark"></i> Built for big metro cities only</li>
+        </ul>
+      </div>
+      <div class="compare-card sbl">
+        <h4>Service By Local</h4>
+        <ul>
+          <li><i class="fa-solid fa-circle-check"></i> Zero commission — providers keep 100%</li>
+          <li><i class="fa-solid fa-circle-check"></i> Customers choose from real offers, not auto-assignment</li>
+          <li><i class="fa-solid fa-circle-check"></i> Profile owner must personally do the work</li>
+          <li><i class="fa-solid fa-circle-check"></i> Built for tier-2/3 India, not a metro afterthought</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap trust">
+    <div class="trust-card">
+      <div class="quote-mark">"</div>
+      <p class="decl">I confirm that I will personally visit and provide this service myself. I will not send an employee or any other person on my behalf.</p>
+      <div class="who">
+        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+        Every provider agrees to this before going live
+      </div>
+    </div>
+    <div class="trust-points">
+      <div class="point"><i class="fa-solid fa-id-card"></i><div><h4>Aadhaar-verified badge</h4><p>Providers can verify their identity via Aadhaar to unlock an "Aadhaar OK" badge and show interest on feed requests.</p></div></div>
+      <div class="point"><i class="fa-solid fa-user-check"></i><div><h4>No staff, no substitutes</h4><p>The person who built the profile is the person who shows up. Always.</p></div></div>
+      <div class="point"><i class="fa-solid fa-map-location-dot"></i><div><h4>Genuinely local</h4><p>Requests and offers happen between real neighbours, not a call centre far away.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Frequently asked</p>
+      <h2>Common questions about Service By Local</h2>
+    </div>
+    <div class="legal" style="padding:0;">
+      <div style="max-width:820px;">
+        <h2 style="margin-top:0;border-top:none;padding-top:0;">What is Service By Local?</h2>
+        <p>Service By Local is a zero-commission hyperlocal services marketplace. It connects independent local providers — including on-site technicians, home-visit artists, local material suppliers, and vehicle owner-drivers — directly with nearby customers, without any middleman or commission. It is not a staffing or recruitment platform.</p>
+
+        <h2>Does Service By Local charge commission on jobs?</h2>
+        <p>No. Service By Local does not take any commission from providers or customers. Providers keep 100% of what they earn.</p>
+
+        <h2>Is Service By Local a job marketplace or staffing agency?</h2>
+        <p>No. Service By Local is not a job marketplace and does not dispatch staff. Every provider profile must be personally operated by the same individual who performs the service — a provider cannot send an employee or another person on their behalf.</p>
+
+        <h2>How are providers verified?</h2>
+        <p>Providers complete Aadhaar-based identity verification to show interest on requests and unlock an "Aadhaar OK" badge. Only their name, age, and gender are verified and shown — the Aadhaar number and photo are never displayed. Providers can also upload a skill certificate, reviewed and approved by the SBL team, to earn a "Skill Certified" badge.</p>
+
+        <h2>How does a customer request a service?</h2>
+        <p>A customer can open a provider's full profile and send a request directly to that one provider, or post a request to the local feed so nearby verified providers can see it and show interest. Either way, the provider is notified instantly, and the customer's exact contact details are shared only once they confirm a provider.</p>
+
+        <h2>Can a customer call or message a provider directly?</h2>
+        <p>Yes. From a provider's profile, a customer can call, message on WhatsApp, or use in-app chat directly — in addition to sending a job request.</p>
+
+        <h2>What service categories does Service By Local cover?</h2>
+        <p>Eight categories: Appliance Repair, Home Services, Construction, Rental Vehicle, Daily Needs, Beauty &amp; Grooming, Event Services, and Education &amp; Tuition — split further into 66 sub-categories.</p>
+
+        <h2>Is Service By Local available as a mobile app?</h2>
+        <p>Yes — Service By Local is available on Google Play, in addition to this website.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="wrap">
+    <div class="cta-band">
+      <h2>Your town is next.</h2>
+      <p>Whether you need a helping hand or you're the one people should be calling — Service By Local is where your town finds each other.</p>
+      <div class="ctas">
+        <a href="#" class="btn btn-light" onclick="openApp(event,'search')"><i class="fa-solid fa-magnifying-glass"></i> Find a Service</a>
+        <a href="#" class="btn btn-light" onclick="openApp(event,'provider')"><i class="fa-solid fa-user-plus"></i> Create Your Profile</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-top">
+    <div>
+      <h3>Get Service By Local on your phone</h3>
+      <p>Find providers, post requests, and manage your profile — right from the app.</p>
+    </div>
+    <a href="#" class="store-badge" onclick="openApp(event,'home')">
+      <i class="fa-brands fa-google-play"></i>
+      <span><small>Get it on</small><b>Google Play</b></span>
+    </a>
+  </div>
+
+  <div class="wrap">
+    <div>
+      <div class="fbrand">Service By Local</div>
+      <p style="opacity:.8;font-size:.9rem;max-width:280px;">A zero-commission hyperlocal services marketplace.</p>
+      <div class="fsocial">
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+      </div>
+    </div>
+    <div class="flist"><h4>Company</h4>
+      <a href="about.html">About Us</a>
+      <a href="services.html">All Services</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="flist"><h4>Legal</h4>
+      <div class="flegal-btns">
+        <a href="terms.html" class="flegal-btn"><i class="fa-solid fa-file-contract"></i> Terms &amp; Conditions</a>
+        <a href="privacy.html" class="flegal-btn"><i class="fa-solid fa-user-shield"></i> Privacy Policy</a>
+      </div>
+    </div>
+    <div class="flist"><h4>Contact</h4>
+      <a href="mailto:support@servicebylocal.com">support@servicebylocal.com</a>
+      <a href="#">Jharkhand, India</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SBL Digital Corporation Private Limited. All rights reserved.</span>
+    <span>Made in India 🇮🇳</span>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
